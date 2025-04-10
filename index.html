@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Surat untukmu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
+      font-family: 'Playfair Display', serif;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: #b30059;
+      margin-bottom: 30px;
+      animation: floatText 3s ease-in-out infinite alternate;
+    }
+
+    .btn {
+      background: #ff5c8a;
+      color: white;
+      padding: 14px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.4s;
+    }
+
+    .btn:hover {
+      background: #e6005c;
+      transform: scale(1.05);
+    }
+
+    .loader {
+      border: 6px solid #ffe0ef;
+      border-top: 6px solid #ff5c8a;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+      display: none;
+    }
+
+    .surat-wrapper {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeInSurat 1.2s ease forwards;
+    }
+
+    .amplop {
+      width: 120px;
+      height: 80px;
+      background: #ff5c8a;
+      margin-bottom: 20px;
+      clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 50%);
+      animation: popUp 0.8s ease;
+    }
+
+    .isiSurat {
+      max-width: 640px;
+      margin: auto;
+      padding: 35px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      font-size: 1.2rem;
+      color: #4d0039;
+      text-shadow: 1px 1px 2px #fff;
+      white-space: pre-wrap;
+      animation: slideUp 1.2s ease forwards;
+      display: none;
+    }
+
+    .typing {
+      border-right: 2px solid #b30059;
+      animation: blink 1s steps(2) infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: transparent; }
+      50% { border-color: #b30059; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    @keyframes fadeInSurat {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes floatText {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    @keyframes popUp {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .heart {
+      position: absolute;
+      color: #ff80b3;
+      font-size: 16px;
+      animation: fall 6s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    audio { display: none; }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2.2rem; }
+      .isiSurat { font-size: 1rem; padding: 25px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="center" id="halamanAwal">
+    <h1>Hai, Alvi</h1>
+    <button class="btn" onclick="mulaiLoading()">Klik di sini</button>
+    <div class="loader" id="loading"></div>
+  </div>
+
+  <div class="surat-wrapper center" id="halamanSurat">
+    <div class="amplop"></div>
+    <div class="isiSurat" id="isiSurat"><span id="teks"></span></div>
+  </div>
+
+  <audio autoplay loop id="lagu">
+    <source src="Wedding Nasheed _ Muhammad Al Muqit (English Lyrics).mp3" type="audio/mp3" />
+  </audio>
+
+  <script>
+    function mulaiLoading() {
+      document.querySelector('.btn').style.display = 'none';
+      document.getElementById("loading").style.display = 'block';
+      setTimeout(bukaSurat, 3000);
+    }
+
+    function bukaSurat() {
+      document.getElementById("halamanAwal").style.display = "none";
+      const surat = document.getElementById("halamanSurat");
+      surat.style.display = "flex";
+      setTimeout(() => {
+        document.getElementById("isiSurat").style.display = "block";
+        ketikSurat(`I asked allah for happiness and he gave me you !!!
+
+Semoga ada kesempatan untuk kita saling mengutarakan perasaan yang kita mikiki , pun jika tidak sama denganku , aku tetap memandang mu dengan caraku sendiri
+❤.`);
+      }, 800);
+      document.getElementById("lagu").play();
+      jatuhkanHati();
+    }
+
+    function ketikSurat(teks) {
+      let i = 0;
+      const el = document.getElementById("teks");
+      el.classList.add("typing");
+      function ketik() {
+        if (i < teks.length) {
+          el.innerHTML += teks.charAt(i);
+          i++;
+          setTimeout(ketik, 45);
+        } else {
+          el.classList.remove("typing");
+        }
+      }
+      ketik();
+    }
+
+    function jatuhkanHati() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerText = "♥";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 24 + 12 + "px";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
